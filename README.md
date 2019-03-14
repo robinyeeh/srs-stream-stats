@@ -24,7 +24,7 @@ $ make
 ### Usage
 
 ```
-$ cmod +x srs-stream-stats
+$ chmod +x srs-stream-stats
 $./srs-stream-stats rtmp://127.0.0.1:1935/live/livestream,rtmp://127.0.0.1:1935/live/livestream2
 ```
 

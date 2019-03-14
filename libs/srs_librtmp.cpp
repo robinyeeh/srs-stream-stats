@@ -2441,21 +2441,21 @@ int srs_human_print_rtmp_packet4(char type, u_int32_t timestamp, char* data, int
     
     u_int32_t pts;
     if (srs_utils_parse_timestamp(timestamp, type, data, size, &pts) != 0) {
-        srs_human_trace("Rtmp packet id=%"PRId64"/%.1f/%.1f, type=%s, dts=%d, ndiff=%d, diff=%d, size=%d, DecodeError",
+        srs_human_trace("Rtmp packet id=%" PRId64 "/%.1f/%.1f, type=%s, dts=%d, ndiff=%d, diff=%d, size=%d, DecodeError",
             nb_packets, pi, gfps, srs_human_flv_tag_type2string(type), timestamp, ndiff, diff, size
         );
         return ret;
     }
     
     if (type == SRS_RTMP_TYPE_VIDEO) {
-        srs_human_trace("Video packet id=%"PRId64"/%.1f/%.1f, type=%s, dts=%d, pts=%d, ndiff=%d, diff=%d, size=%d, %s(%s,%s)",
+        srs_human_trace("Video packet id=%" PRId64 "/%.1f/%.1f, type=%s, dts=%d, pts=%d, ndiff=%d, diff=%d, size=%d, %s(%s,%s)",
             nb_packets, pi, gfps, srs_human_flv_tag_type2string(type), timestamp, pts, ndiff, diff, size,
             srs_human_flv_video_codec_id2string(srs_utils_flv_video_codec_id(data, size)),
             srs_human_flv_video_avc_packet_type2string(srs_utils_flv_video_avc_packet_type(data, size)),
             srs_human_flv_video_frame_type2string(srs_utils_flv_video_frame_type(data, size))
         );
     } else if (type == SRS_RTMP_TYPE_AUDIO) {
-        srs_human_trace("Audio packet id=%"PRId64"/%.1f/%.1f, type=%s, dts=%d, pts=%d, ndiff=%d, diff=%d, size=%d, %s(%s,%s,%s,%s)",
+        srs_human_trace("Audio packet id=%" PRId64 "/%.1f/%.1f, type=%s, dts=%d, pts=%d, ndiff=%d, diff=%d, size=%d, %s(%s,%s,%s,%s)",
             nb_packets, pi, gfps, srs_human_flv_tag_type2string(type), timestamp, pts, ndiff, diff, size,
             srs_human_flv_audio_sound_format2string(srs_utils_flv_audio_sound_format(data, size)),
             srs_human_flv_audio_sound_rate2string(srs_utils_flv_audio_sound_rate(data, size)),
@@ -2464,7 +2464,7 @@ int srs_human_print_rtmp_packet4(char type, u_int32_t timestamp, char* data, int
             srs_human_flv_audio_aac_packet_type2string(srs_utils_flv_audio_aac_packet_type(data, size))
         );
     } else if (type == SRS_RTMP_TYPE_SCRIPT) {
-        srs_human_verbose("Data packet id=%"PRId64"/%.1f/%.1f, type=%s, time=%d, ndiff=%d, diff=%d, size=%d",
+        srs_human_verbose("Data packet id=%" PRId64 "/%.1f/%.1f, type=%s, time=%d, ndiff=%d, diff=%d, size=%d",
             nb_packets, pi, gfps, srs_human_flv_tag_type2string(type), timestamp, ndiff, diff, size);
         int nparsed = 0;
         while (nparsed < size) {
@@ -2481,7 +2481,7 @@ int srs_human_print_rtmp_packet4(char type, u_int32_t timestamp, char* data, int
             srs_freepa(amf0_str);
         }
     } else {
-        srs_human_trace("Rtmp packet id=%"PRId64"/%.1f/%.1f, type=%#x, dts=%d, pts=%d, ndiff=%d, diff=%d, size=%d",
+        srs_human_trace("Rtmp packet id=%" PRId64 "/%.1f/%.1f, type=%#x, dts=%d, pts=%d, ndiff=%d, diff=%d, size=%d",
             nb_packets, pi, gfps, type, timestamp, pts, ndiff, diff, size);
     }
     
