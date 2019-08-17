@@ -122,6 +122,11 @@ int play_stream3(const char *url) {
     int64_t pre_timestamp = 0;
     int64_t pre_interval_ts = 0;
 
+    int64_t pre_kframe_pts = 0;
+    int64_t pre_kframe_ts = 0;
+    int32_t total_v_frames = 0;
+    int32_t pre_kframe_num = 0;
+
     if (srs_rtmp_handshake(rtmp) != 0) {
         srs_human_trace("simple handshake failed.");
         goto rtmp_destroy;
@@ -165,7 +170,6 @@ int play_stream3(const char *url) {
         u_int32_t pts;
         char frame_type;
         char read_type;
-        u_int32_t pst;
 
         if (srs_utils_parse_timestamp(timestamp, type, data, size, &pts) != 0) {
 //            srs_human_trace("Rtmp packet id=%" PRId64 ", type=%s, dts=%d, ndiff=%d, diff=%d, size=%d, DecodeError",
@@ -227,13 +231,29 @@ int play_stream3(const char *url) {
             }
 
             if ('I' == frame_type) {
+                int64_t now_kframe_ts = srs_utils_time_ms();
+
+                int64_t kframe_ts_diff = now_kframe_ts - pre_kframe_ts;
+                int64_t kframe_pts_diff = pts - pre_kframe_pts;
+                int32_t kframe_num_diff = total_v_frames - pre_kframe_num;
+
+                srs_human_trace(
+                        "Stream : %s, key frame local ts : %lld, local ts diff : %lld, Keyframe pts : %d, "
+                        "pts diff : %lld, Vframe number : %d, Keyframe num diff : %d, , Audio codec : %s, Video codec : %s",
+                        stream_name.c_str(), now_kframe_ts, kframe_ts_diff, pts, kframe_pts_diff, total_v_frames,
+                        kframe_num_diff, a_codec.c_str(), v_codec.c_str());
+
                 key_frames++;
+                pre_kframe_ts = now_kframe_ts;
+                pre_kframe_pts = pts;
+                pre_kframe_num = total_v_frames;
             }
 
             total_length += size;
 
             v_frames++;
             nb_packets++;
+            total_v_frames++;
 
             pre_timestamp = timestamp;
             pre_now = now_ts;
